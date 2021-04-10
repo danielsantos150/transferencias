@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsuarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(array('prefix' => 'v1'), function()
+{
+    Route::get('/', function () {
+        return response()->json(['code' => 200, 'status' => 'Conectado', 'mensagem' => 'API de Transferências']);
+    });
+
+    Route::resource('usuario', UsuarioController::class);
 });
