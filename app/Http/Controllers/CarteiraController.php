@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuario;
+use App\Http\Helpers\MensagensHelper;
+use App\Models\Carteira;
 use Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
-class UsuarioController extends Controller
+class CarteiraController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,6 +18,7 @@ class UsuarioController extends Controller
      */
     public function index()
     {
+        //
     }
 
     /**
@@ -26,30 +28,18 @@ class UsuarioController extends Controller
      */
     public function create()
     {
+        //
     }
 
     /**
-     * Função responsável por realizar o cadastro de um novo usuário e criar também sua carteira.
+     * Função responsável por realizar o depósito de dinheiro no saldo da carteira do usuário.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'sUsuario_nome' => 'required|string|max:100',
-            'sUsuario_cpf' => 'required|numeric|unique:tb_usuarios|digits_between:11,14',
-            'sUsuario_email' => 'required|email|unique:tb_usuarios|max:50',
-            'sUsuario_password' => 'required|string|min:8|max:256',
-            'iTipo_usuario_id' => 'required|integer|in:1,2',
-        ]);
-        if ($validator->fails()) {
-            $response = Helper::buildJson(Response::HTTP_BAD_REQUEST, Helper::MESSAGE_ERROR, $validator->errors());
-        }else{
-            $usuario = new Usuario();
-            $response = Helper::buildJson(Response::HTTP_CREATED, Helper::MESSAGE_OK, $usuario->cadastraUsuario($request->input()));
-        }
-        return response()->json($response, $response['code']);
+        //
     }
 
     /**
@@ -60,6 +50,7 @@ class UsuarioController extends Controller
      */
     public function show($id)
     {
+        //
     }
 
     /**
@@ -70,17 +61,28 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
+
     }
 
     /**
-     * Update the specified resource in storage.
+     * Função responsável por realizar o depósito de dinheiro no saldo da carteira do usuário.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $iCarteira_id)
     {
+        $validator = Validator::make($request->all(), [
+            'fSaldo_carteira' => 'required|numeric|between:0.00,999999999999999.99',
+        ]);
+        if ($validator->fails()) {
+            $response = Helper::buildJson(Response::HTTP_BAD_REQUEST, Helper::MESSAGE_ERROR, $validator->errors());
+        }else{
+            $carteira = new Carteira();
+            $response = $carteira->depositaSaldo($request->input(), $iCarteira_id);
+        }
+        return response()->json($response, $response['code']);
     }
 
     /**
@@ -91,5 +93,6 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
+        //
     }
 }

@@ -123,6 +123,7 @@ return [
         "sUsuario_email" => "sUsuario_email",
         "sUsuario_password" => "sUsuario_password",
         "iTipo_usuario_id" => "iTipo_usuario_id",
+        "fSaldo_carteira" => "fSaldo_carteira",
     ],
 
 ];

@@ -11,7 +11,7 @@ class Usuario extends Model
 {
     protected $table = "tb_usuarios";
 
-    protected $primary_key = "iUsuario_id";
+    protected $primaryKey = "iUsuario_id";
 
     protected $hidden = [
         'sUsuario_password',
@@ -28,8 +28,12 @@ class Usuario extends Model
             $usuario->sUsuario_password = $request["sUsuario_password"];
             $usuario->iTipo_usuario_id = $request["iTipo_usuario_id"];
             $usuario->save();
+
+            $carteira = new Carteira();
+            $novaCarteira = $carteira->cadastraCarteira($usuario);
+
             DB::commit();
-            return $usuario->toArray();
+            return ['usuario' => $usuario->toArray(), 'carteira' => $novaCarteira];
         } catch (Exception $erro) {
             DB::rollback();
             return $erro->getMessage();

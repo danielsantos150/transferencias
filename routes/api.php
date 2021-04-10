@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\CarteiraController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +22,6 @@ Route::group(array('prefix' => 'v1'), function()
     });
 
     Route::resource('usuario', UsuarioController::class);
+
+    Route::resource('carteira', CarteiraController::class);
 });
