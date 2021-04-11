@@ -22,19 +22,20 @@ class Transferencia extends Model
         try {
             $transacao = false;
             $carteira = new Carteira();
-            $oCarteiraAtual = $oPagador = $carteira->getCarteira($request['iCarteira_id'], $carteira::PAGADOR);
+            $oPagador = $carteira->getCarteira($request['iCarteira_id'], $carteira::PAGADOR);
             $oBeneficiario = $carteira->getCarteira($request['iUsuario_id'], $carteira::BENEFICIARIO);
             if ($this->verificaPermiteTransferir($oPagador, $oBeneficiario, $request) === true) {
                 $transacao = $this->completaTransferencia($oPagador, $oBeneficiario, $request);
             }
+            $oCarteiraAtualizado = $carteira->getCarteira($request['iCarteira_id'], $carteira::PAGADOR);
             $notificacao = $this->verificaServicoNotificador();
             if ($transacao === TRUE && $notificacao === TRUE) {
-                $retorno = ['msg' => Helper::MESSAGE_SUCCESS, 'data' => $oCarteiraAtual];
+                $retorno = ['msg' => Helper::MESSAGE_SUCCESS, 'data' => $oCarteiraAtualizado];
             }else{
                 if ($transacao === TRUE && $notificacao === FALSE) {
-                    $retorno = ['msg' => Helper::MESSAGE_NOTIFY_ERROR, 'data' => $oCarteiraAtual];
+                    $retorno = ['msg' => Helper::MESSAGE_NOTIFY_ERROR, 'data' => $oCarteiraAtualizado];
                 } else {
-                    $retorno = ['msg' => 'Helper::MESSAGE_TRANSACTION', 'data' => $oCarteiraAtual];
+                    $retorno = ['msg' => 'Helper::MESSAGE_TRANSACTION', 'data' => $oCarteiraAtualizado];
                 }
             }
             return $retorno;

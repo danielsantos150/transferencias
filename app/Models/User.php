@@ -33,7 +33,7 @@ class User extends Authenticatable
                 'sUsuario_nome' => $request['sUsuario_nome'],
                 'sUsuario_cpf' => $request['sUsuario_cpf'],
                 'sUsuario_email' => $request['sUsuario_email'],
-                'password' => bcrypt($request['sUsuario_password']),
+                'password' => bcrypt($request['password']),
                 'iTipo_usuario_id' => $request['iTipo_usuario_id']
             ]);
             $token = $usuario->createToken('API Token')->plainTextToken;
