@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\CarteiraController;
+use App\Http\Controllers\TransferenciaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +25,6 @@ Route::group(array('prefix' => 'v1'), function()
     Route::resource('usuario', UsuarioController::class);
 
     Route::resource('carteira', CarteiraController::class);
+
+    Route::resource('transferencia', TransferenciaController::class);
 });

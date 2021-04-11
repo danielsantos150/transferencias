@@ -8,6 +8,8 @@ class MensagensHelper
 {
     public const MESSAGE_OK = "OK";
     public const MESSAGE_ERROR = "Houve uma falha ao realizar a requisição.";
+    public const MESSAGE_FAIL = "FAIL";
+    public const MESSAGE_SUCCESS = "Transferência realizada com sucesso.";
 
     public $response = ['code' => '', 'message' => '', 'result' => ''];
 

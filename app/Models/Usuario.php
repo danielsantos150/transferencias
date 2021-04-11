@@ -25,7 +25,7 @@ class Usuario extends Model
             $usuario->sUsuario_nome = $request["sUsuario_nome"];
             $usuario->sUsuario_cpf = $request["sUsuario_cpf"];
             $usuario->sUsuario_email = $request["sUsuario_email"];
-            $usuario->sUsuario_password = $request["sUsuario_password"];
+            $usuario->sUsuario_password = bcrypt($request["sUsuario_password"]);
             $usuario->iTipo_usuario_id = $request["iTipo_usuario_id"];
             $usuario->save();
 
