@@ -3,20 +3,20 @@
 namespace App\Models;
 
 use Exception;
+use Helper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Helper;
 use Symfony\Component\HttpFoundation\Response;
 
 class Carteira extends Model
 {
-    protected $table = "tb_carteira";
-
-    protected $primaryKey = "iCarteira_id";
-
     public const PAGADOR = 1;
     public const BENEFICIARIO = 2;
+
+    protected $table = 'tb_carteira';
+
+    protected $primaryKey = 'iCarteira_id';
 
     public function cadastraCarteira($novoUsuario)
     {
@@ -36,7 +36,7 @@ class Carteira extends Model
     {
         try {
             $carteira = $this::find($iCarteira_id);
-            $carteira->fSaldo_carteira += $requestSaldo["fSaldo_carteira"];
+            $carteira->fSaldo_carteira += $requestSaldo['fSaldo_carteira'];
             $carteira->save();
             return $carteira->toArray();
         } catch (Exception $erro) {
@@ -53,9 +53,9 @@ class Carteira extends Model
                 ->select('u.iUsuario_id', 'u.sUsuario_nome', 'u.sUsuario_cpf',
                  'tp.iTipo_usuario_id', 'sTipo_usuario',
                  'c.iCarteira_id', 'c.fSaldo_carteira');
-            if($tp_usuario == self::PAGADOR){
+            if ($tp_usuario === self::PAGADOR) {
                 $carteira->where('c.iCarteira_id', '=', $id);
-            }else if($tp_usuario == self::BENEFICIARIO){
+            } elseif ($tp_usuario === self::BENEFICIARIO) {
                 $carteira->where('c.iUsuario_id', '=', $id);
             }
             return $carteira->get()->first();

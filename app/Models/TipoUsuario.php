@@ -9,10 +9,10 @@ class TipoUsuario extends Model
 {
     use HasFactory;
 
-    protected $table = "tb_tipo_usuario";
-
-    protected $primary_key = "iTipo_usuario_id";
-
     public const COMUM = 1;
     public const LOGISTA = 2;
+
+    protected $table = 'tb_tipo_usuario';
+
+    protected $primary_key = 'iTipo_usuario_id';
 }
