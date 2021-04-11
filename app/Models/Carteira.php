@@ -28,7 +28,7 @@ class Carteira extends Model
             $carteira->save();
             return $carteira->toArray();
         } catch (Exception $erro) {
-            throw new Exception($erro->getMessage(), 500);
+            return Helper::buildJsonError($erro->getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ class Carteira extends Model
             $carteira->save();
             return Helper::buildJson(Response::HTTP_OK, Helper::MESSAGE_OK, $carteira->toArray());
         } catch (Exception $erro) {
-            return Helper::buildJson(Response::HTTP_INTERNAL_SERVER_ERROR, Helper::MESSAGE_ERROR, ["error" => $erro->getMessage()]);
+            return Helper::buildJsonError($erro->getMessage());
         }
     }
 
@@ -60,7 +60,7 @@ class Carteira extends Model
             }
             return $carteira->get()->first();
         } catch (Exception $erro) {
-            return $erro->getMessage();
+            return Helper::buildJsonError($erro->getMessage());
         }
     }
 }

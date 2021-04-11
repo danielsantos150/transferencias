@@ -2,6 +2,7 @@
 
 namespace App\Http\Helpers;
 
+use Helper;
 use Symfony\Component\HttpFoundation\Response;
 
 class MensagensHelper
@@ -9,7 +10,8 @@ class MensagensHelper
     public const MESSAGE_OK = "OK";
     public const MESSAGE_ERROR = "Houve uma falha ao realizar a requisição.";
     public const MESSAGE_FAIL = "FAIL";
-    public const MESSAGE_SUCCESS = "Transferência realizada com sucesso.";
+    public const MESSAGE_SUCCESS = "Transferência realizada com sucesso e beneficiário notificado.";
+    public const MESSAGE_NOTIFY_ERROR = "Transferência realizaca com sucesso, mas serviço de notificação inacessível.";
 
     public $response = ['code' => '', 'message' => '', 'result' => ''];
 
@@ -18,5 +20,10 @@ class MensagensHelper
         $response['message'] = $type_result;
         $response['result'] = $result;
         return $response;
+    }
+
+    public static function buildJsonError($error_msg)
+    {
+        return Helper::buildJson(Response::HTTP_INTERNAL_SERVER_ERROR, Helper::MESSAGE_ERROR, ["error" => $error_msg]);
     }
 }

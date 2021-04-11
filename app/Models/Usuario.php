@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Exception;
+use Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
 
 class Usuario extends Model
 {
@@ -36,7 +38,7 @@ class Usuario extends Model
             return ['usuario' => $usuario->toArray(), 'carteira' => $novaCarteira];
         } catch (Exception $erro) {
             DB::rollback();
-            return $erro->getMessage();
+            return Helper::buildJsonError($erro->getMessage());
         }
     }
 }
