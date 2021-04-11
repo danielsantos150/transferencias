@@ -27,8 +27,8 @@ class AddTbUsuariosToTbCarteira extends Migration
     public function down()
     {
         Schema::table('tb_carteira', function (Blueprint $table) {
-            $table->dropForeign('iUsuario_id');
-            $table->dropColumn('iUsuario_id');
+            /*$table->dropForeign('iUsuario_id');
+            $table->dropColumn('iUsuario_id');*/
         });
     }
 }

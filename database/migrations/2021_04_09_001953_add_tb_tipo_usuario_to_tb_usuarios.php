@@ -27,8 +27,8 @@ class AddTbTipoUsuarioToTbUsuarios extends Migration
     public function down()
     {
         Schema::table('tb_usuarios', function (Blueprint $table) {
-            $table->dropForeign('iTipo_usuario_id');
-            $table->dropColumn('iTipo_usuario_id');
+            /*$table->dropForeign('iTipo_usuario_id');
+            $table->dropColumn('iTipo_usuario_id');*/
         });
     }
 }

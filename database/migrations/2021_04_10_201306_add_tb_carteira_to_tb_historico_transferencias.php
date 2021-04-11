@@ -29,10 +29,10 @@ class AddTbCarteiraToTbHistoricoTransferencias extends Migration
     public function down()
     {
         Schema::table('tb_historico_transferencias', function (Blueprint $table) {
-            $table->dropForeign('iCarteira_fonte_id');
+            /*$table->dropForeign('iCarteira_fonte_id');
             $table->dropColumn('iCarteira_fonte_id');
             $table->dropForeign('iCarteira_destino_id');
-            $table->dropColumn('iCarteira_destino_id');
+            $table->dropColumn('iCarteira_destino_id');*/
         });
     }
 }

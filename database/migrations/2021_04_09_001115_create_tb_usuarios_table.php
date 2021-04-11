@@ -18,7 +18,7 @@ class CreateTbUsuariosTable extends Migration
             $table->string("sUsuario_nome", 100);
             $table->string("sUsuario_cpf", 14)->unique();
             $table->string("sUsuario_email", 50)->unique();
-            $table->string("sUsuario_password", 256);
+            $table->string("password", 256);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -23,28 +23,28 @@ class Transferencia extends Model
     public function realizaTransferencia($request)
     {
         try {
-            DB::beginTransaction();
             $carteira = new Carteira();
             $oPagador = $carteira->getCarteira($request['iCarteira_id'], $carteira::PAGADOR);
             $oBeneficiario = $carteira->getCarteira($request['iUsuario_id'], $carteira::BENEFICIARIO);
             if (empty($oPagador) || empty($oBeneficiario)) {
-                return Helper::buildJson(Response::HTTP_PARTIAL_CONTENT, Helper::MESSAGE_FAIL, "Um dos usuários informados não possuem carteira.");
+                return ["msg" => "Um dos usuários informados não possuem carteira.", "data" => ""];
             }else if($oPagador->iTipo_usuario_id == TipoUsuario::LOGISTA){
-                return Helper::buildJson(Response::HTTP_PRECONDITION_FAILED, Helper::MESSAGE_FAIL, "O usuário pagador é um lojista, ele apenas recebe transferências.");
+                return ["msg" => "O usuário pagador é um lojista, ele apenas recebe transferências.", "data" => $oPagador];
             }else if(floatval($oPagador->fSaldo_carteira) < $request["fValor_transferido"]){
-                return Helper::buildJson(Response::HTTP_PRECONDITION_FAILED, Helper::MESSAGE_FAIL, "Saldo insuficiente para realizar a transação.");
+                return ["msg" => "Saldo insuficiente para realizar a transação.", "data" => $oPagador];
             }else{
-                $this->completaTransferencia($oPagador, $oBeneficiario, $request);
+                $transacao = $this->completaTransferencia($oPagador, $oBeneficiario, $request);
             }
-            DB::commit();
+            $notificacao = $this->verificaServicoNotificador();
             $oCarteiraAtual = $carteira->getCarteira($request['iCarteira_id'], $carteira::PAGADOR);
-            if($this->verificaServicoNotificador()){
-                return Helper::buildJson(Response::HTTP_OK, Helper::MESSAGE_SUCCESS, $oCarteiraAtual);
+            if($transacao === TRUE && $notificacao === TRUE){
+                return ["msg" => Helper::MESSAGE_SUCCESS, "data" => $oCarteiraAtual];
+            }else if($transacao === TRUE && $notificacao === FALSE){
+                return ["msg" => Helper::MESSAGE_NOTIFY_ERROR, "data" => $oCarteiraAtual];
             }else{
-                return Helper::buildJson(Response::HTTP_OK, Helper::MESSAGE_NOTIFY_ERROR, $oCarteiraAtual);
+                return ["msg" => Helper::MESSAGE_TRANSACTION, "data" => $oCarteiraAtual];
             }
         } catch (Exception $erro) {
-            DB::rollback();
             return Helper::buildJsonError($erro->getMessage());
         }
     }
@@ -52,6 +52,7 @@ class Transferencia extends Model
     public function completaTransferencia($oPagador, $oBeneficiario, $request)
     {
         try {
+            DB::beginTransaction();
             if($this->verificaServicoAutorizador()){
                 $carteiraPagador = Carteira::find($oPagador->iCarteira_id);
                 $carteiraPagador->fSaldo_carteira = $carteiraPagador->fSaldo_carteira - $request["fValor_transferido"];
@@ -59,6 +60,11 @@ class Transferencia extends Model
                 $carteiraBeneficiario = Carteira::find($oBeneficiario->iCarteira_id);
                 $carteiraBeneficiario->fSaldo_carteira += $request["fValor_transferido"];
                 $carteiraBeneficiario->save();
+                DB::commit();
+                return TRUE;
+            }else{
+                DB::rollback();
+                return FALSE;
             }
         } catch (Exception $erro) {
             return Helper::buildJsonError($erro->getMessage());

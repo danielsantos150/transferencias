@@ -38,7 +38,7 @@ class Carteira extends Model
             $carteira = $this::find($iCarteira_id);
             $carteira->fSaldo_carteira += $requestSaldo["fSaldo_carteira"];
             $carteira->save();
-            return Helper::buildJson(Response::HTTP_OK, Helper::MESSAGE_OK, $carteira->toArray());
+            return $carteira->toArray();
         } catch (Exception $erro) {
             return Helper::buildJsonError($erro->getMessage());
         }
